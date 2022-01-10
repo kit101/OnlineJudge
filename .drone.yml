@@ -1,0 +1,40 @@
+type: docker
+name: default
+kind: pipeline
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build-ui
+  image: node:8.12.0
+  environment:
+    CXX: g++-4.8
+    USE_SENTRY: 1
+  commands:
+  - cd /drone
+  - git clone https://github.com/kit101/OnlineJudgeFE
+  - cd OnlineJudgeFE
+  - npm install
+  - npm run build:dll
+  - npm run build
+  - find dist/ -type f -name "*.map" -delete
+  - cp -r dist /drone/src/dist
+
+- name: publish
+  image: plugins/docker
+  settings:
+    dockerfile: Dockerfile
+    repo: kit101z/qingdaou-onlinejudge-backend
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    tags:
+    - latest
+    - ${DRONE_COMMIT}
+  when:
+    event:
+    - push
+    - tag
