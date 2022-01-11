@@ -14,27 +14,25 @@ steps:
     USE_SENTRY: 1
   commands:
   - cd /drone
-  - git clone https://github.com/kit101/OnlineJudgeFE
+  - git clone https://github.com/kit101/OnlineJudgeFE.git --depth=5 -b v1.0.0
   - cd OnlineJudgeFE
-  - npm install
+  - npm install --registry=https://registry.npm.taobao.org/
   - npm run build:dll
   - npm run build
   - find dist/ -type f -name "*.map" -delete
   - cp -r dist /drone/src/dist
-
 - name: publish
   image: plugins/docker
   settings:
+    auto_tag: true
     dockerfile: Dockerfile
     repo: kit101z/qingdaou-onlinejudge-backend
     username:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    tags:
-    - latest
-    - ${DRONE_COMMIT}
-  when:
-    event:
-    - push
-    - tag
+
+trigger:
+  ref:
+  - "refs/heads/master"
+  - "refs/tags/**"

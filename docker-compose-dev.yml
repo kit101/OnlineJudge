@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  postgredb:
+    image: postgres:10-alpine
+    container_name: oj-postgre
+    ports:
+    - 5435:5432
+    environment:
+    - POSTGRES_DB=onlinejudge
+    - POSTGRES_USER=onlinejudge
+    - POSTGRES_PASSWORD=onlinejudge
+  redisdb:
+    image: redis:4.0-alpine
+    container_name: oj-redis
+    ports:
+    - 6380:6379
