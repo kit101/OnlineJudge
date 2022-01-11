@@ -73,6 +73,15 @@ Rankings 中可以控制图表和菜单的显隐。
 
 Modern browsers(chrome, firefox) 和 Internet Explorer 10+.
 
+## 开发
+1. python3， postgre及redis环境准备，可以使用`docker-compose-dev.yml`直接启动
+2. 新建文件`./data/config/secret.key`，并写入任意值作为密钥
+3. 开启`virtualenv`环境（可选）
+4. 安装项目依赖`pip install -r ./deploy/requirements.txt`
+5. 初始化数据库，`python manage.py migrate`
+6. 创建管理员用户，`python manage.py inituser --username root --password rootroot --action create_super_admin`
+7. pycharm启动或执行命令`python manage.py runserver 8000`
+
 ## 特别感谢
 
 + 所有为本项目做出贡献的人
